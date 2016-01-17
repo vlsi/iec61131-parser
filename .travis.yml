@@ -1,15 +1,16 @@
 sudo: false
 language: java
-
 jdk:
-  - openjdk7
-  - oraclejdk8
-
-before_cache:
-  # No sense in caching current build artifacts
-  rm -rf $HOME/.m2/repository/com/github/vlsi/iec61131
-
-
+- openjdk7
+- oraclejdk8
+before_cache: rm -rf $HOME/.m2/repository/com/github/vlsi/iec61131
 cache:
   directories:
-    - '$HOME/.m2/repository'
+  - $HOME/.m2/repository
+env:
+  global:
+  - secure: igP6AWQIBqYXrpxE0QKsjd7JqHA+Sp3iDLImt/ENtwMTMgQFKZdcMDwLtZwKnPHoXMeHnPLHhVZwmBUeGa1dRAZ/TbpPb2YTEq27MIij0GcCU/lwK6orA16pFJwL201mpyCszjRAY8EkSPGmU7K6s77NL7qcXaXIJF3QJIfYYENhseZrY1Kx2R54Mtkm2S5rNy1+nXzwAHphQioLSkO2/N0CTuiiM2i2Gf5EW2/LiRGn9tgWGG0RE6ukqQnkqLkfrMMcUAHPjRNhf2Z3Crx1nVbeaUzsDlYMY9jGREeXWJUay1A0M/CTvnLPx/Y6jz7YnAm67CgM5aRSheoGgJ0qs54Fzx5YqJMWPW7PqeTLE7Ly8MImvNglCpYCPN3OtM0XJzVnZPjlmldNSRayJTdJrCA0TFEYN3Bc47/nYi+BVO3G+F2S5lHO+kABbkn/JZdXkKT37GycDubqTOzzKluYXYR6jSrWzOq1hgOkuglAEJmNbE7PrtuCNNBbTR1TZhy0vjxJIn6oGf/mYXr+WwBDRwUCAtWwEvi+Wvnl1HWgopuA9snnUHeFXOe4gC0AGnXMWpgCLma/1lMlvFgV4HKUqw7QR6qZWrd7SZuh5MBZItZfsSSiEkH5fBA5dh3Nyg4YzpsEQsZEW6YGLYYIVJ3iKYWL/oEqu7wcuwvozYRkxSk=
+  - secure: gAGjDZJwB3H8YQde/fv/GHdJ46vdS/yTdMtLH6oli0P/bYdKewEtKClV7v7lbHCIHIzh2HWNf17E+9AfV7bmQRFxMd6oZVY4NAIhW9y6ofCHaCuEWS0hi1Gx7qeLXj2olRuA6Q3vB9ybiaNhr/R+gcm93QXKteEu8tTunuGKPME6pc5B1q9d5+MRDNB43UKgrVJquQ3t4AXx9g9AJGr/CxStPcao3TYOXDlFRe7l7MCATUswK+CCKB5MruCvVARuH95gJ3QYYpIRz9D8mJcXNv/F3LSZDktO0iT3DzxAhbH2ZwB8sewz0T/+HGc+l1XdnW0qsJ9Q/cbbK+0KoaK68mGuLIE8WQnquNjQWNtdjKuT1WS7ajOVrfc/P6LPOp0HhacG4HS84JURzkfff7E2gVczkYUEtzohgelMXNlBRALseMD9hRY+DVCQzcHxv8hO7wWheBv6qImcd/Vn8aH1hZ7o6bHTY+cHNpYZi1q4UOaQ3aVN53u17WEv4MF7SxSrjSS9Fh9eLTfCzDYJCw2MMqWfQukFmhrzkE4nfbjUzVNI6S7J61P2JhWAvAoFHjAKv6AMq3lD5m/NQ2KVB6HN0j3CRwVNizsoEdTsW2tiWiOdOwYrOo3cLzknr5xMFYBu2BucDTRtSvpFrvmhGLj9l97ey6ItGWfPmLG/uvf7DwE=
+
+after_success:
+  - "test $TRAVIS_PULL_REQUEST == 'false' && test $TRAVIS_BRANCH == 'master' && test $TRAVIS_JDK_VERSION == 'openjdk7' && mvn clean deploy -B -V --settings settings.xml -DskipTests"
