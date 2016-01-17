@@ -20,7 +20,8 @@ public class ParserTest {
 
     IEC61131Parser.Variable_declarationContext var =
         varBlock.variable_declaration(0);
-    Assert.assertEquals(var.name.getText(), "temp", "variable name");
+    Assert.assertEquals(var.names.size(), 1, "there should be single variable");
+    Assert.assertEquals(var.names.get(0).getText(), "temp", "variable name");
     Assert.assertEquals(var.type.getText(), "INT", "variable type");
   }
 
@@ -28,9 +29,9 @@ public class ParserTest {
   public void arrayVariable() {
     IEC61131Parser p = getIec61131Parser("temp: ARRAY[1..2, 4..6] OF BOOL;");
     IEC61131Parser.Variable_declarationContext var = p.variable_declaration();
-    Assert.assertEquals(var.type.getClass(), IEC61131Parser.ArrayContext.class,
+    Assert.assertEquals(var.type.getClass(), IEC61131Parser.ArrayTypeContext.class,
         "type should be array");
-    IEC61131Parser.ArrayContext ary = (IEC61131Parser.ArrayContext) var.type;
+    IEC61131Parser.ArrayTypeContext ary = (IEC61131Parser.ArrayTypeContext) var.type;
     Assert.assertEquals(ary.array.ranges.size(), 2, "1..2, 4..6 -> two ranges");
   }
 

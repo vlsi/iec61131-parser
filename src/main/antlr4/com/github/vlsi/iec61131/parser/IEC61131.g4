@@ -6,11 +6,16 @@
 
 grammar IEC61131;
 
-function: 'FUNCTION' name=ID ':' type=type_rule var_block*;
+pou
+  : function
+  | function_block
+  ;
+
+function: 'FUNCTION' name=ID ':' type=type_rule var_blocks+=var_block*;
 
 function_block:
   'FUNCTION_BLOCK' name=ID
-  var_block*;
+  var_blocks+=var_block*;
 
 var_block locals[boolean input, boolean output, boolean temp]
   : ('VAR'
@@ -18,12 +23,12 @@ var_block locals[boolean input, boolean output, boolean temp]
      | { $output=true; } 'VAR_OUTPUT'
      | { $input=$output=true; } 'VAR_INPUT_OUTPUT'
      | { $temp=true; } 'VAR_TEMP')
-    ( variable_declaration* 'END_VAR');
+    ( variables+=variable_declaration* 'END_VAR');
 
 type_rule:
-  name=ID #simple
-  | array=array_type #array
-  | pointer=pointer_type #pointer
+  name=ID #simpleType
+  | array=array_type #arrayType
+  | pointer=pointer_type #pointerType
   ;
 
 array_type
@@ -35,7 +40,7 @@ range
 pointer_type: 'POINTER' 'TO' type=type_rule;
 
 variable_declaration:
-  name=ID ':' type=type_rule (':=' initializer=variable_initializer)? ';' ;
+  names+=ID (',' names+=ID)* ':' type=type_rule (':=' initializer=variable_initializer)? ';' ;
 
 variable_initializer:
   literal;
