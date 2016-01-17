@@ -4,3 +4,12 @@ language: java
 jdk:
   - openjdk7
   - oraclejdk8
+
+before_cache:
+  # No sense in caching current build artifacts
+  rm -rf $HOME/.m2/repository/com/github/vlsi/iec61131
+
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
